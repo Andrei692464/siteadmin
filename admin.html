@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Panoul profesorului — Caietul pentru Gimnaziu</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔑</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Atkinson+Hyperlegible:wght@400;700&family=Caveat:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --hartie:#fcfcf7;--caiet:#dbe6f3;--cerneala:#17335f;--creion:#55575f;
+  --rosu:#d23b34;--galben:#ffd84d;--verde:#1f8a5b;--r:10px;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;font-family:"Atkinson Hyperlegible",system-ui,sans-serif;color:var(--cerneala);
+  background-color:var(--hartie);
+  background-image:linear-gradient(var(--caiet) 1px,transparent 1px),linear-gradient(90deg,var(--caiet) 1px,transparent 1px);
+  background-size:26px 26px;line-height:1.6;
+}
+img{max-width:100%;display:block}
+.wrap{max-width:900px;margin:0 auto;padding:0 20px}
+header.sus{background:var(--cerneala);color:var(--hartie);border-bottom:3px solid var(--cerneala)}
+.bara{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:14px 0}
+.logo{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:1.2rem;display:flex;align-items:center;gap:9px}
+.logo .semn{width:30px;height:30px;display:grid;place-items:center;border-radius:8px;background:var(--galben);color:var(--cerneala)}
+.bara .drept{margin-left:auto;display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:.9rem}
+.bara a{color:var(--galben)}
+
+h1{font-family:"Bricolage Grotesque",sans-serif;font-size:1.9rem;letter-spacing:-.03em;margin:0 0 6px}
+h2{font-family:"Bricolage Grotesque",sans-serif;font-size:1.3rem;margin:0 0 14px;letter-spacing:-.02em}
+.nota{font-family:"Caveat",cursive;font-size:1.25rem;color:var(--rosu)}
+
+.card{background:#fff;border:2px solid var(--cerneala);border-radius:var(--r);padding:22px;margin:22px 0}
+label{display:block;font-weight:700;font-size:.92rem;margin:14px 0 5px}
+input,textarea,select{
+  width:100%;font:inherit;padding:10px 13px;border-radius:8px;border:2px solid var(--caiet);
+  background:var(--hartie);color:inherit;
+}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--cerneala)}
+textarea{min-height:90px;resize:vertical}
+input[type=file]{padding:9px;background:#fff}
+.btn{
+  font:inherit;font-weight:700;cursor:pointer;padding:11px 20px;border-radius:999px;
+  border:2px solid var(--cerneala);background:var(--cerneala);color:var(--hartie);margin-top:16px;
+}
+.btn.gol{background:#fff;color:var(--cerneala)}
+.btn.mic{padding:6px 14px;font-size:.85rem;margin:0}
+.btn.sterge{background:#fff;color:var(--rosu);border-color:var(--rosu)}
+.btn:disabled{opacity:.55;cursor:wait}
+
+.taburi{display:flex;gap:8px;margin:26px 0 0;flex-wrap:wrap}
+.tab{
+  font:inherit;font-weight:700;cursor:pointer;padding:9px 18px;border-radius:999px 999px 0 0;
+  border:2px solid var(--cerneala);border-bottom:none;background:var(--caiet);color:var(--cerneala);
+}
+.tab[aria-selected=true]{background:#fff}
+
+.mesaj{margin-top:14px;font-weight:700;min-height:1.4em}
+.mesaj.bun{color:var(--verde)}
+.mesaj.rau{color:var(--rosu)}
+
+.previz{margin-top:12px;border:2px dashed var(--caiet);border-radius:8px;padding:10px;display:none}
+.previz img{max-height:220px;border-radius:6px;margin:0 auto}
+.previz.activ{display:block}
+
+.lista{display:grid;gap:12px}
+.rand{display:flex;gap:14px;align-items:center;border:2px solid var(--caiet);border-radius:8px;padding:10px;background:var(--hartie)}
+.rand img,.rand .fis{width:84px;height:64px;object-fit:cover;border-radius:6px;border:1.5px solid var(--cerneala);flex:none}
+.rand .fis{display:grid;place-items:center;background:#fff;font-size:1.5rem;text-decoration:none}
+.rand .info{flex:1;min-width:0}
+.rand .info b{display:block}
+.rand .info span{font-size:.86rem;color:var(--creion);display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gol-msg{border:2px dashed var(--caiet);border-radius:8px;padding:26px;text-align:center;color:var(--creion)}
+
+.intreb-rand{border:2px solid var(--caiet);border-radius:8px;padding:14px;background:var(--hartie);position:relative}
+.intreb-rand .nr{font-weight:800;font-family:"Bricolage Grotesque",sans-serif;margin-bottom:8px}
+.intreb-rand input{margin-bottom:8px}
+.intreb-rand .opt-rand{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.intreb-rand .opt-rand input[type=text]{margin:0;flex:1}
+.intreb-rand .opt-rand input[type=radio]{width:auto;flex:none}
+.intreb-rand .sterge-intreb{position:absolute;top:10px;right:10px;background:none;border:none;color:var(--rosu);font-weight:800;cursor:pointer;font-size:1.1rem}
+.mic-nota{font-size:.82rem;color:var(--creion);margin-top:-4px;margin-bottom:6px}
+
+#login{max-width:420px;margin:70px auto}
+#panou{display:none}
+:focus-visible{outline:3px solid var(--rosu);outline-offset:2px}
+</style>
+</head>
+<body>
+
+<header class="sus">
+  <div class="wrap bara">
+    <div class="logo"><span class="semn">🔑</span>Panoul profesorului</div>
+    <div class="drept">
+      <a href="index.html" target="_blank" rel="noopener">vezi site-ul public</a>
+      <span id="cineEsti"></span>
+      <button class="btn gol mic" id="iesire" style="display:none">Ieși din cont</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- LOGIN -->
+  <section id="login" class="card">
+    <h1>Intră în cont</h1>
+    <p class="nota">doar tu poți adăuga teme și fișe</p>
+    <label for="email">Email</label>
+    <input id="email" type="email" autocomplete="username" placeholder="profesor@exemplu.ro">
+    <label for="parola">Parolă</label>
+    <input id="parola" type="password" autocomplete="current-password" placeholder="••••••••">
+    <button class="btn" id="btnLogin">Intră în cont</button>
+    <div class="mesaj" id="mesajLogin"></div>
+  </section>
+
+  <!-- PANOU -->
+  <section id="panou">
+    <div class="taburi" role="tablist">
+      <button class="tab" role="tab" id="tabOrar" aria-selected="true" data-tip="orar">Orar</button>
+      <button class="tab" role="tab" id="tabTeme" aria-selected="false" data-tip="teme">Teme</button>
+      <button class="tab" role="tab" id="tabFise" aria-selected="false" data-tip="fise">Fișe</button>
+      <button class="tab" role="tab" id="tabQuiz" aria-selected="false" data-tip="quiz">Quiz</button>
+    </div>
+
+    <!-- formular ORAR / TEME / FIȘE -->
+    <div class="card" id="cardSimplu" style="margin-top:0;border-radius:0 var(--r) var(--r) var(--r)">
+      <h2 id="titluForm">Adaugă orarul</h2>
+      <label for="titlu">Titlu</label>
+      <input id="titlu" placeholder="Ex: Orarul clasei a V-a — semestrul 1">
+      <label for="descriere">Descriere</label>
+      <textarea id="descriere" placeholder="Ex: Exercițiile 3, 4 și 7 de la pagina 42. De adus caietul luni."></textarea>
+
+      <!-- doar pentru ORAR: link -->
+      <div id="blocLink">
+        <label for="linkOrar">Link către orar</label>
+        <input id="linkOrar" type="url" placeholder="https://drive.google.com/...">
+        <div class="mic-nota" style="margin-top:6px">Dacă folosești Google Drive, setează partajarea pe „Oricine are linkul”.</div>
+      </div>
+
+      <!-- pentru TEME / FIȘE: poză sau fișier -->
+      <div id="blocFisier" style="display:none">
+        <label for="fisier">Poză sau fișier (PDF, imagine)</label>
+        <input id="fisier" type="file" accept="image/*,.pdf">
+        <div class="previz" id="previz"><img id="previzImg" alt=""><div id="previzNume" style="text-align:center;font-weight:700"></div></div>
+      </div>
+
+      <button class="btn" id="btnSalveaza">Publică</button>
+      <div class="mesaj" id="mesaj"></div>
+    </div>
+
+    <!-- formular QUIZ -->
+    <div class="card" id="cardQuiz" style="display:none;margin-top:0;border-radius:0 var(--r) var(--r) var(--r)">
+      <h2>Creează un quiz</h2>
+      <label for="quizTitlu">Titlul quiz-ului</label>
+      <input id="quizTitlu" placeholder="Ex: Quiz — fracții și numere zecimale">
+      <label for="quizDescriere">Descriere (opțional)</label>
+      <textarea id="quizDescriere" placeholder="Ex: 8 întrebări despre fracții."></textarea>
+
+      <div id="listaIntrebariNoi" style="margin-top:18px;display:grid;gap:14px"></div>
+
+      <button class="btn gol" id="btnAdaugaIntrebare" type="button">+ Adaugă o întrebare</button>
+      <button class="btn" id="btnPublicaQuiz" type="button">Publică quiz-ul</button>
+      <div class="mesaj" id="mesajQuiz"></div>
+    </div>
+
+    <div class="card" id="cardListaSimpla">
+      <h2 id="titluLista">Orarul publicat</h2>
+      <div class="lista" id="lista"></div>
+    </div>
+
+    <div class="card" id="cardListaQuiz" style="display:none">
+      <h2>Quiz-urile publicate</h2>
+      <div class="lista" id="listaQuizAdmin"></div>
+    </div>
+  </section>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script>
+/* ====== CONEXIUNE SUPABASE ====== */
+const SUPABASE_URL = "https://dkbslssefqvjwcotxcfg.supabase.co";
+const SUPABASE_KEY = "sb_publishable_cEnanXvgCQR3DLJDjQ9ytA_u0ZUI2Lv";
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let tip = "orar"; // "orar", "teme" sau "fise"
+
+const $ = id => document.getElementById(id);
+const esc = t => { const d=document.createElement("div"); d.textContent=t??""; return d.innerHTML; };
+const esteFisier = u => /\.(pdf|docx?|pptx?|zip)(\?|$)/i.test(u||"");
+
+function spune(el, text, ok){
+  el.textContent = text;
+  el.className = "mesaj " + (ok ? "bun" : "rau");
+}
+
+/* ====== AUTENTIFICARE ====== */
+$("btnLogin").addEventListener("click", intra);
+$("parola").addEventListener("keydown", e=>{ if(e.key==="Enter") intra(); });
+
+async function intra(){
+  const btn = $("btnLogin");
+  btn.disabled = true;
+  spune($("mesajLogin"), "Se verifică…", true);
+  const { error } = await db.auth.signInWithPassword({ email:$("email").value.trim(), password:$("parola").value });
+  btn.disabled = false;
+  if(error){
+    spune($("mesajLogin"), "Email sau parolă greșite. Încearcă din nou.", false);
+    return;
+  }
+  arata();
+}
+
+$("iesire").addEventListener("click", async ()=>{
+  await db.auth.signOut();
+  location.reload();
+});
+
+async function arata(){
+  const { data:{ session } } = await db.auth.getSession();
+  if(!session) return;
+  $("login").style.display = "none";
+  $("panou").style.display = "block";
+  $("iesire").style.display = "inline-block";
+  $("cineEsti").textContent = session.user.email;
+  incarcaLista();
+}
+arata();
+
+/* ====== TABURI ====== */
+document.querySelectorAll(".tab").forEach(t=>{
+  t.addEventListener("click", ()=>{
+    tip = t.dataset.tip;
+    $("blocLink").style.display   = tip === "orar" ? "block" : "none";
+    $("blocFisier").style.display = tip === "orar" ? "none"  : "block";
+    document.querySelectorAll(".tab").forEach(x=> x.setAttribute("aria-selected", x===t ? "true":"false"));
+    const esteQuiz = tip === "quiz";
+    $("cardSimplu").style.display = esteQuiz ? "none" : "block";
+    $("cardListaSimpla").style.display = esteQuiz ? "none" : "block";
+    $("cardQuiz").style.display = esteQuiz ? "block" : "none";
+    $("cardListaQuiz").style.display = esteQuiz ? "block" : "none";
+    if(esteQuiz){ incarcaListaQuiz(); return; }
+    const texte = {
+      orar: {form:"Adaugă orarul", lista:"Orarul publicat", ph:"Ex: Orarul clasei a V-a — semestrul 1"},
+      teme: {form:"Adaugă o temă", lista:"Temele publicate", ph:"Ex: Tema pentru 20 septembrie — fracții"},
+      fise: {form:"Adaugă o fișă", lista:"Fișele publicate", ph:"Ex: Fișă de lucru — divizibilitate (2023)"}
+    };
+    $("titluForm").textContent  = texte[tip].form;
+    $("titluLista").textContent = texte[tip].lista;
+    $("titlu").placeholder = texte[tip].ph;
+    $("mesaj").textContent = "";
+    incarcaLista();
+  });
+});
+
+/* ====== PREVIZUALIZARE ====== */
+$("fisier").addEventListener("change", ()=>{
+  const f = $("fisier").files[0];
+  const box = $("previz"), img = $("previzImg"), nume = $("previzNume");
+  if(!f){ box.classList.remove("activ"); return; }
+  box.classList.add("activ");
+  if(f.type.startsWith("image/")){
+    img.style.display = "block";
+    img.src = URL.createObjectURL(f);
+    nume.textContent = "";
+  } else {
+    img.style.display = "none";
+    nume.textContent = "📄 " + f.name;
+  }
+});
+
+/* ====== PUBLICARE ====== */
+$("btnSalveaza").addEventListener("click", async ()=>{
+  const titlu = $("titlu").value.trim();
+  const descriere = $("descriere").value.trim();
+  const btn = $("btnSalveaza");
+  let url;
+
+  if(!titlu) return spune($("mesaj"), "Scrie un titlu înainte de a publica.", false);
+
+  if(tip === "orar"){
+    url = $("linkOrar").value.trim();
+    if(!/^https?:\/\/\S+$/i.test(url))
+      return spune($("mesaj"), "Lipește un link valid, care începe cu https://", false);
+    btn.disabled = true;
+  } else {
+    const fisier = $("fisier").files[0];
+    if(!fisier) return spune($("mesaj"), "Alege o poză sau un fișier.", false);
+
+    btn.disabled = true;
+    spune($("mesaj"), "Se încarcă fișierul…", true);
+
+    const ext = (fisier.name.split(".").pop() || "jpg").toLowerCase();
+    const cale = `${Date.now()}-${Math.random().toString(36).slice(2,8)}.${ext}`;
+
+    const up = await db.storage.from(tip).upload(cale, fisier, { cacheControl:"3600", upsert:false });
+    if(up.error){
+      btn.disabled = false;
+      return spune($("mesaj"), "Fișierul nu s-a încărcat: " + up.error.message, false);
+    }
+    url = db.storage.from(tip).getPublicUrl(cale).data.publicUrl;
+  }
+
+  const ins = await db.from(tip).insert({ title:titlu, description:descriere || null, image_url:url });
+  btn.disabled = false;
+  if(ins.error) return spune($("mesaj"), "Nu s-a putut salva: " + ins.error.message, false);
+
+  const mesajOk = { orar:"Orarul a fost publicat", teme:"Tema a fost publicată", fise:"Fișa a fost publicată" }[tip];
+  spune($("mesaj"), mesajOk + ". Apare deja pe site.", true);
+  $("titlu").value = ""; $("descriere").value = ""; $("fisier").value = ""; $("linkOrar").value = "";
+  $("previz").classList.remove("activ");
+  incarcaLista();
+});
+
+/* ====== LISTĂ + ȘTERGERE ====== */
+async function incarcaLista(){
+  const el = $("lista");
+  el.innerHTML = `<div class="gol-msg">Se încarcă…</div>`;
+  const { data, error } = await db.from(tip).select("*").order("created_at",{ascending:false});
+  if(error) return el.innerHTML = `<div class="gol-msg">Lista nu s-a încărcat. Reîncarcă pagina.</div>`;
+  if(!data.length) return el.innerHTML = `<div class="gol-msg">Încă nimic aici. Publică primul element din formularul de mai sus.</div>`;
+
+  el.innerHTML = data.map(x=>{
+    const media = (tip === "orar" || esteFisier(x.image_url))
+      ? `<a class="fis" href="${esc(x.image_url)}" target="_blank" rel="noopener">${tip === "orar" ? "🔗" : "📄"}</a>`
+      : `<img src="${esc(x.image_url)}" alt="">`;
+    const data_ = new Date(x.created_at).toLocaleDateString("ro-RO",{day:"numeric",month:"short",year:"numeric"});
+    return `<div class="rand">
+      ${media}
+      <div class="info">
+        <b>${esc(x.title)}</b>
+        <span>${esc(x.description || "fără descriere")}</span>
+        <span>${data_}</span>
+      </div>
+      <button class="btn sterge mic" data-sterge="${x.id}" data-url="${esc(x.image_url)}">Șterge</button>
+    </div>`;
+  }).join("");
+
+  el.querySelectorAll("[data-sterge]").forEach(b=>{
+    b.addEventListener("click", ()=> sterge(b.dataset.sterge, b.dataset.url, b));
+  });
+}
+
+async function sterge(id, url, btn){
+  if(!confirm("Ștergi definitiv acest element?")) return;
+  btn.disabled = true;
+  const { error } = await db.from(tip).delete().eq("id", id);
+  if(error){ btn.disabled = false; return alert("Nu s-a putut șterge: " + error.message); }
+  const cale = (url.split(`/object/public/${tip}/`)[1] || "").split("?")[0];
+  if(cale) await db.storage.from(tip).remove([decodeURIComponent(cale)]);
+  incarcaLista();
+}
+
+/* ====== CONSTRUCTOR QUIZ ====== */
+let contorIntrebari = 0;
+
+function adaugaIntrebare(){
+  contorIntrebari++;
+  const id = contorIntrebari;
+  const div = document.createElement("div");
+  div.className = "intreb-rand";
+  div.dataset.id = id;
+  div.innerHTML = `
+    <button type="button" class="sterge-intreb" title="Șterge întrebarea" data-sterge-intreb="${id}">✕</button>
+    <div class="nr">Întrebarea ${id}</div>
+    <input type="text" placeholder="Scrie întrebarea" data-camp="intrebare">
+    <div class="mic-nota">Scrie variantele și bifează cercul din dreptul celei corecte</div>
+    ${[0,1,2,3].map(i=>`
+      <div class="opt-rand">
+        <input type="radio" name="corect-${id}" value="${i}" ${i===0?"checked":""}>
+        <input type="text" placeholder="Varianta ${i+1}" data-camp="optiune">
+      </div>`).join("")}
+  `;
+  $("listaIntrebariNoi").appendChild(div);
+  div.querySelector(`[data-sterge-intreb="${id}"]`).addEventListener("click", ()=> div.remove());
+}
+$("btnAdaugaIntrebare").addEventListener("click", adaugaIntrebare);
+adaugaIntrebare(); // prima întrebare, gata pregătită
+
+$("btnPublicaQuiz").addEventListener("click", async ()=>{
+  const titlu = $("quizTitlu").value.trim();
+  const descriere = $("quizDescriere").value.trim();
+  const randuri = [...$("listaIntrebariNoi").children];
+  const btn = $("btnPublicaQuiz");
+
+  if(!titlu) return spune($("mesajQuiz"), "Scrie un titlu pentru quiz.", false);
+  if(!randuri.length) return spune($("mesajQuiz"), "Adaugă cel puțin o întrebare.", false);
+
+  const intrebari = [];
+  for(const r of randuri){
+    const text = r.querySelector('[data-camp="intrebare"]').value.trim();
+    const optiuni = [...r.querySelectorAll('[data-camp="optiune"]')].map(i=>i.value.trim());
+    if(!text || optiuni.some(o=>!o)) return spune($("mesajQuiz"), "Completează toate întrebările și toate cele 4 variante.", false);
+    const corect = Number(r.querySelector('input[type=radio]:checked').value);
+    intrebari.push({ intrebare:text, optiuni, corect });
+  }
+
+  btn.disabled = true;
+  spune($("mesajQuiz"), "Se publică…", true);
+
+  const insQuiz = await db.from("quizuri").insert({ title:titlu, description:descriere || null }).select().single();
+  if(insQuiz.error){ btn.disabled=false; return spune($("mesajQuiz"), "Nu s-a putut salva quiz-ul: " + insQuiz.error.message, false); }
+
+  const randuriDb = intrebari.map((q,i)=>({ quiz_id:insQuiz.data.id, intrebare:q.intrebare, optiuni:q.optiuni, corect:q.corect, ordine:i }));
+  const insIntreb = await db.from("quiz_intrebari").insert(randuriDb);
+  btn.disabled = false;
+  if(insIntreb.error) return spune($("mesajQuiz"), "Quiz-ul s-a creat, dar întrebările nu s-au salvat: " + insIntreb.error.message, false);
+
+  spune($("mesajQuiz"), "Quiz-ul a fost publicat. Apare deja pe site.", true);
+  $("quizTitlu").value = ""; $("quizDescriere").value = "";
+  $("listaIntrebariNoi").innerHTML = ""; contorIntrebari = 0; adaugaIntrebare();
+  incarcaListaQuiz();
+});
+
+async function incarcaListaQuiz(){
+  const el = $("listaQuizAdmin");
+  el.innerHTML = `<div class="gol-msg">Se încarcă…</div>`;
+  const { data, error } = await db.from("quizuri").select("*, quiz_intrebari(count)").order("created_at",{ascending:false});
+  if(error) return el.innerHTML = `<div class="gol-msg">Lista nu s-a încărcat. Reîncarcă pagina.</div>`;
+  if(!data.length) return el.innerHTML = `<div class="gol-msg">Încă niciun quiz. Creează primul mai sus.</div>`;
+
+  el.innerHTML = data.map(x=>{
+    const nrIntreb = x.quiz_intrebari?.[0]?.count ?? 0;
+    const data_ = new Date(x.created_at).toLocaleDateString("ro-RO",{day:"numeric",month:"short",year:"numeric"});
+    return `<div class="rand">
+      <div class="fis">📝</div>
+      <div class="info">
+        <b>${esc(x.title)}</b>
+        <span>${nrIntreb} întrebări • ${esc(x.description || "fără descriere")}</span>
+        <span>${data_}</span>
+      </div>
+      <button class="btn sterge mic" data-sterge-quiz="${x.id}">Șterge</button>
+    </div>`;
+  }).join("");
+
+  el.querySelectorAll("[data-sterge-quiz]").forEach(b=>{
+    b.addEventListener("click", async ()=>{
+      if(!confirm("Ștergi definitiv acest quiz și toate întrebările lui?")) return;
+      b.disabled = true;
+      const { error } = await db.from("quizuri").delete().eq("id", b.dataset.stergeQuiz);
+      if(error){ b.disabled=false; return alert("Nu s-a putut șterge: " + error.message); }
+      incarcaListaQuiz();
+    });
+  });
+}
+</script>
+</body>
+</html>
